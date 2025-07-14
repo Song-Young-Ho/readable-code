@@ -4,7 +4,6 @@ import cleancode.minesweeper.tobe.GameBoard;
 import cleancode.minesweeper.tobe.GameException;
 
 import java.util.List;
-import java.util.SequencedCollection;
 import java.util.stream.IntStream;
 
 public class ConsoleOutputHandler {

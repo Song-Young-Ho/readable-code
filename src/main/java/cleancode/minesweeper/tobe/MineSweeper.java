@@ -9,7 +9,7 @@ public class MineSweeper {
     private final BoardIndexConverter boardIndexConverter = new BoardIndexConverter();
     private final ConsoleInputHandler consoleInputHandler = new ConsoleInputHandler();
     private final ConsoleOutputHandler consoleOutputHandler = new ConsoleOutputHandler();
-    private static int gameStatus = 0; // 0: 게임 중, 1: 승리, -1: 패배
+    private int gameStatus = 0; // 0: 게임 중, 1: 승리, -1: 패배
 
     public MineSweeper(GameLevel gameLevel) {
         gameBoard = new GameBoard(gameLevel);
@@ -44,27 +44,27 @@ public class MineSweeper {
     }
 
     private void actOnCell(String cellInput, String userActionInput) {
-        int selectedColumnIndex = boardIndexConverter.getSelectedColIndex(cellInput, gameBoard.getColSize());
+        int selectedColIndex = boardIndexConverter.getSelectedColIndex(cellInput, gameBoard.getColSize());
         int selectedRowIndex = boardIndexConverter.getSelectedRowIndex(cellInput, gameBoard.getRowSize());
 
         if (doesUserChooseToPlantFlag(userActionInput)) {
-            gameBoard.flag(selectedRowIndex, selectedColumnIndex);
+            gameBoard.flag(selectedRowIndex, selectedColIndex);
             checkIfGameIsOver();
             return;
         }
 
         if (doesUserChooseToOpenCell(userActionInput)) {
-            if (gameBoard.isLandMineCell(selectedRowIndex, selectedColumnIndex)) {
-                gameBoard.open(selectedRowIndex, selectedColumnIndex);
+            if (gameBoard.isLandMineCell(selectedRowIndex, selectedColIndex)) {
+                gameBoard.open(selectedRowIndex, selectedColIndex);
                 changeGameStatusToLose();
                 return;
             }
-            gameBoard.openSurroundedCells(selectedRowIndex, selectedColumnIndex);
+
+            gameBoard.openSurroundedCells(selectedRowIndex, selectedColIndex);
             checkIfGameIsOver();
             return;
         }
         throw new GameException("잘못된 번호를 선택하셨습니다.");
-
     }
 
     private void changeGameStatusToLose() {
@@ -98,7 +98,9 @@ public class MineSweeper {
     }
 
     private void checkIfGameIsOver() {
-        if (gameBoard.isAllCellChecked()) changeGameStatusToWin();
+        if (gameBoard.isAllCellChecked()) {
+            changeGameStatusToWin();
+        }
     }
 
     private void changeGameStatusToWin() {
